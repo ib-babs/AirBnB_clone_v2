@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Database Engine"""
 from sqlalchemy.orm import sessionmaker, Session, scoped_session
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -6,6 +7,7 @@ import os
 
 
 class DBStorage:
+    """Defining the Database"""
     __engine = None
     __session = None
     Base = declarative_base()
