@@ -8,8 +8,18 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        key = list(FileStorage.__objects.keys())
+        special_class = []
+        return_dict = {}
+        if cls is not None:
+            special_class = ([k for k in key if cls.__name__ in k])
+        if special_class != []:
+            for special in special_class:
+                return_dict[special] = FileStorage.__objects[special]
+            if return_dict:
+                return return_dict
         return FileStorage.__objects
 
     def new(self, obj):
@@ -36,15 +46,22 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
+        """Delete obj in self.__objects"""
+        obj_to_delete = '{}.{}'.format(obj.__class__.__name__, obj.id)
+        if obj_to_delete in FileStorage.__objects:
+            del FileStorage.__objects[obj_to_delete]
+        self.save()
