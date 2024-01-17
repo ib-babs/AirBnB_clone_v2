@@ -29,20 +29,22 @@ class DBStorage:
 
         session = self.__session
         row = session.query(cls).all()
-        # return_vals = {}
-        # if cls is None:
-        #     from models.amenity import Amenity
-        #     from models.state import State
-        #     from models.user import User
-        #     from models.city import City
-        #     from models.review import Review
-        #     from models.place import Place
-        #     rows = session.query()
-        #     obj_id = state.State.__name__ + '.' + state.State.id
-        #     obj_id = model.__class.__name + '.' + model.id
-        #     return_vals[obj_id] = rows.all()
-        #     return return_vals
-        print(cls)
+        return_vals = {}
+        if cls is None:
+            from models.amenity import Amenity
+            from models.state import State
+            from models.user import User
+            from models.city import City
+            from models.review import Review
+            from models.place import Place
+            return {
+                f'{User.__class__name}.{User.id}': session.query(User).all(),
+                f'{State.__class__name}.{State.id}': session.query(State).all(),
+                f'{City.__class__name}.{City.id}': session.query(City).all(),
+                f'{Amenity.__class__name}.{Amenity.id}': session.query(Amenity).all(),
+                f'{Place.__class__name}.{Place.id}': session.query(Place).all(),
+                f'{Review.__class__name}.{Review.id}': session.query(Review).all()
+            }
         return {'{}.{}'.format(cls.__name__, cls.id): row}
 
     def new(self, obj):
@@ -52,7 +54,6 @@ class DBStorage:
 
     def save(self):
         """Commit new change"""
-        print(self.__engine)
         self.__session.commit()
 
     def delete(self, obj=None):
