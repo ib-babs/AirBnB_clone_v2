@@ -1,1 +1,16 @@
-{}
+{
+  "City.172a3a23-35f3-4712-8e2d-2335f1f07cf8": {
+    "id": "172a3a23-35f3-4712-8e2d-2335f1f07cf8",
+    "created_at": "2024-01-18T00:11:11.534347",
+    "updated_at": "2024-01-18T00:11:11.534381",
+    "name": "California",
+    "__class__": "City"
+  },
+  "State.12524f4c-b8ad-4351-a2cd-6469b73c3fd4": {
+    "id": "12524f4c-b8ad-4351-a2cd-6469b73c3fd4",
+    "created_at": "2024-01-18T00:14:28.351849",
+    "updated_at": "2024-01-18T00:14:28.351887",
+    "name": "California",
+    "__class__": "State"
+  }
+}

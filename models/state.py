@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import String, Column, ForeignKey
+from sqlalchemy import String, Column
 from sqlalchemy.orm import relationship
 
 
@@ -12,7 +12,7 @@ class State(BaseModel, Base):
 
     # For DBStorage
     cities = relationship(
-        "City", backref='state', cascade="all, delete")
+        "City", backref='state', cascade="all, delete, delete-orphan")
 
     # For FileStorage
     def cities(self):

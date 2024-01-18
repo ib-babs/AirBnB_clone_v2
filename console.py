@@ -134,13 +134,14 @@ class HBNBCommand(cmd.Cmd):
                 if hasattr(new_instance, key):
                     if val.startswith('"'):
                         val = val.removeprefix('"')
+                    if val.endswith('"'):
                         val = val.removesuffix('"')
                     if re.search('_', val):
                         val = re.sub('_', ' ', val)
                     if key in HBNBCommand.types:
                         val = HBNBCommand.types[key](val)
                     setattr(new_instance, key, val)
-
+        storage.new(new_instance)
         storage.save()
         print(new_instance.id)
         storage.save()
@@ -225,14 +226,22 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            # for k, v in storage._FileStorage__objects.items():
-            #     if k.split('.')[0] == args:
-            #         print_list.append(str(v))
-            print(storage.all(State))
+            if storage.__class__.__name__ == 'DBStorage':
+                for k, v in storage.all(HBNBCommand.classes[args]).items():
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
+            else:
+                for k, v in storage._FileStorage__objects.items():
+                
+                    if k.split('.')[0] == args:
+                        print_list.append(str(v))
         else:
-            print('cha')
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+            if storage.__class__.__name__ != 'DBStorage':
+                for k, v in storage._FileStorage__objects.items():
+                    print_list.append(str(v))
+            else:
+                for k, v in storage.all().items():
+                    print_list.append(str(v))
 
         print(print_list)
 
