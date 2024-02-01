@@ -15,14 +15,18 @@ def do_deploy(archive_path):
     if exists(archive_path) is False:
         return False
     try:
-        put(archive_path, '/tmp/')
         tmp_archive = '/tmp/{}'.format(archive_path)
         tmp_archive_no_ext = '/tmp/{}'.format(archive_path.replace(".tgz", ''))
-        run('tar -xzf {} -C /data/web_static/releases/{}'.format(tmp_archive,
-                                                                 tmp_archive_no_ext))
+        symlink_curr = "/data/web_static/current"
+        release_data = "/data/web_static/releases/".format(
+            tmp_archive_no_ext
+        )
+        put(archive_path, '/tmp/')
+        run('tar -xzf {} -C {}'.format(
+            tmp_archive, release_data))
         run('rm -rf {} /data/web_static/current'.format(tmp_archive_no_ext))
-        run('ln -s /data/web_static/current /data/web_static/releases/{}'.format(
-            tmp_archive_no_ext))
+        run('ln -s {} /data/web_static/releases/{}'.format(
+            symlink_curr, tmp_archive_no_ext))
         return True
     except:
         return False
