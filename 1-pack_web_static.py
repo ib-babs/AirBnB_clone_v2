@@ -5,7 +5,7 @@ folder of your AirBnB Clone repo, using the function do_pack.
 """
 
 from fabric.api import local
-import datetime
+from datetime import datetime
 from os.path import isdir
 
 
