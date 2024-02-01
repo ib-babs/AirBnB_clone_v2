@@ -22,9 +22,7 @@ def do_deploy(archive_path):
         put(archive_path, '/tmp/')
         run('mkdir -p {}'.foramt(release_data))
         run('tar -xzf {} -C {}'.format(
-            tmp_archive, release_data.format(
-                tmp_archive_no_ext
-            )))
+            tmp_archive, release_data.format(tmp_archive_no_ext)))
         run('rm -rf {} /data/web_static/current'.format(tmp_archive_no_ext))
         run('ln -s {} /data/web_static/releases/{}'.format(
             symlink_curr, tmp_archive_no_ext))
