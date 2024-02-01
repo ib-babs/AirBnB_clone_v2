@@ -1,33 +1,21 @@
 #!/usr/bin/env bash
-# Server configuration
+# Server configuration: Automating script for the server
 
-if dpkg -l | grep 'nginx' >/dev/null 2>&1; then
-    echo 'Nginx has already been installed.'
-else
-    apt-get update -y
-    apt-get upgrade
-    sudo apt install nginx
+if ! [ -x "$(command -v nginx)" ]; then
+    sudo apt-get update -y
+    sudo apt-get upgrade -y
+    sudo apt install nginx -y
 fi
 
-if [ ! -e '/data/' ]; then
-    sudo mkdir /data/
+if ! [ -e '/data/web_static/shared/' ]; then
+    sudo mkdir -p /data/web_static/shared/
 fi
-
-if [ ! -e '/data/web_static/' ]; then
-    sudo mkdir /data/web_static/
-fi
-if [ ! -e '/data/web_static/shared/' ]; then
-    sudo mkdir /data/web_static/shared/
-fi
-if [ ! -e '/data/web_static/releases/' ]; then
-    sudo mkdir /data/web_static/releases/
-fi
-if [ ! -e '/data/web_static/releases/test/' ]; then
-    sudo mkdir /data/web_static/releases/test/
+if ! [ -e '/data/web_static/releases/test/' ]; then
+    sudo mkdir -p /data/web_static/releases/test/
 fi
 
 # Creating html file
-if [ ! -e '/data/web_static/releases/test/index.html' ]; then
+if ! [ -e '/data/web_static/releases/test/index.html' ]; then
     sudo touch /data/web_static/releases/test/index.html
     printf %s "<!DOCTYPE html>
 <html lang='en'>
@@ -47,10 +35,8 @@ fi
 # Creating a symlink to /data/web_static/releases/test/ dir
 if [ -L '/data/web_static/current' ]; then
     sudo rm -rf /data/web_static/current
-    sudo ln -s /data/web_static/releases/test/ /data/web_static/current
-else
-    sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 fi
+sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
 sudo chown -R ubuntu:ubuntu /data/
 
@@ -59,8 +45,9 @@ nginx_config="\
 server{
     listen 80 default_server;
     listen [::]:80 default_server;
-    location /data/web_static/current/ {
-        alias /data/web_static/current/hbnb_static;
+    server_name _;
+    location /hbnb_static {
+        alias /data/web_static/current/;
     }
 }
 "
