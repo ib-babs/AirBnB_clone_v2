@@ -18,12 +18,13 @@ def do_deploy(archive_path):
         tmp_archive = '/tmp/{}'.format(archive_path)
         tmp_archive_no_ext = '/tmp/{}'.format(archive_path.replace(".tgz", ''))
         symlink_curr = "/data/web_static/current"
-        release_data = "/data/web_static/releases/".format(
-            tmp_archive_no_ext
-        )
+        release_data = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
+        run('mkdir -p {}'.foramt(release_data))
         run('tar -xzf {} -C {}'.format(
-            tmp_archive, release_data))
+            tmp_archive, release_data.format(
+                tmp_archive_no_ext
+            )))
         run('rm -rf {} /data/web_static/current'.format(tmp_archive_no_ext))
         run('ln -s {} /data/web_static/releases/{}'.format(
             symlink_curr, tmp_archive_no_ext))
