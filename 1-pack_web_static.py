@@ -11,11 +11,11 @@ def do_pack():
     """Create archive for the web content in web_static"""
     if not os.path.exists('versions'):
         os.makedirs('versions')
-    now = datetime.now().strftime("%Y%m%d%H%M%S")
-    archive_name = f"web_static_{now}.tgz"
-    archive_path = os.path.join('versions', archive_name)
-    res = local('tar -czvf {} ~/AirBnB_clone_v2/web_static'.format(
-        archive_path))
-    if res.return_code == 0:
+    try:
+        now = datetime.now().strftime("%Y%m%d%H%M%S")
+        archive_name = f"web_static_{now}.tgz"
+        archive_path = os.path.join('versions', archive_name)
+        local('tar -czvf {} web_static'.format(archive_path))
         return archive_path
-    return None
+    except Exception as e:
+        return None
