@@ -5,7 +5,6 @@ that distributes an archive to your web servers, using the function do_deploy
 """
 
 from fabric.api import run, put, env
-from datetime import datetime
 from os.path import exists
 env.hosts = ['drkhali.tech', '100.25.38.121']
 
@@ -15,17 +14,21 @@ def do_deploy(archive_path):
     if exists(archive_path) is False:
         return False
     try:
-        tmp_archive = '/tmp/{}'.format(archive_path)
-        tmp_archive_no_ext = '/tmp/{}'.format(archive_path.replace(".tgz", ''))
-        symlink_curr = "/data/web_static/current"
-        release_data = "/data/web_static/releases/"
+        path = archive_path.split('/')[-1]
+        no_ext_path = path.replace('.tgz', '')
+        release_path = '/data/web_static/releases/'
+        symlink_curr = '/data/web_static/current'
         put(archive_path, '/tmp/')
-        run('mkdir -p {}'.foramt(release_data))
-        run('tar -xzf {} -C {}'.format(
-            tmp_archive, release_data.format(tmp_archive_no_ext)))
-        run('rm -rf {} /data/web_static/current'.format(tmp_archive_no_ext))
-        run('ln -s {} /data/web_static/releases/{}'.format(
-            symlink_curr, tmp_archive_no_ext))
+        run('mkdir -p {}/{}'.format(release_path, no_ext_path))
+        run('tar -xzf /tmp/{} -C {}/{}'.format(path, release_path, no_ext_path))
+
+        run('rm -rf /tmp/{}'.format(path))
+        run('mv {0}{1}/web_static/* {0}/{1}'.format(
+            release_path, no_ext_path))
+        run('rm -rf {}/{}/web_static {} '.format(
+            release_path, no_ext_path))
+        run('ln -s {} {}/{}'.format(
+            symlink_curr, release_path, no_ext_path))
         return True
     except:
         return False
