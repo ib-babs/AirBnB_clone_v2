@@ -20,7 +20,8 @@ def do_deploy(archive_path):
         symlink_curr = '/data/web_static/current'
         put(archive_path, '/tmp/')
         run('mkdir -p {}/{}'.format(release_path, no_ext_path))
-        run('tar -xzf /tmp/{} -C {}/{}'.format(path, release_path, no_ext_path))
+        run('tar -xzf /tmp/{} -C {}/{}'.format(
+            path, release_path, no_ext_path))
 
         run('rm -rf /tmp/{}'.format(path))
         run('mv {0}{1}/web_static/* {0}/{1}'.format(
