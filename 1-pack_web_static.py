@@ -14,7 +14,8 @@ def do_pack():
     now = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_name = f"web_static_{now}.tgz"
     archive_path = os.path.join('versions', archive_name)
-    res = local(f'tar -czvf {archive_path}  ~/AirBnB_clone_v2/web_static')
+    res = local('tar -czvf {} ~/AirBnB_clone_v2/web_static'.format(
+        archive_path))
     if res.return_code == 0:
         return archive_path
     return None
