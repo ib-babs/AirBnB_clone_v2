@@ -49,12 +49,6 @@ def n_is_integer(n):
     return '{} is a number'.format(n)
 
 
-@app.route('/number/<int:n>', strict_slashes=False)
-def n_is_integer(n):
-    """Return if <n> is an int"""
-    return '{} is a number'.format(n)
-
-
 @app.route('/number_template/<int:n>', strict_slashes=False)
 def n_template_is_integer(n):
     """Rendr template if <n> is an int"""
