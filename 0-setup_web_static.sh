@@ -4,7 +4,7 @@
 if ! [ -x "$(command -v nginx)" ]; then
     sudo apt-get update -y
     sudo apt-get upgrade -y
-    sudo apt-get install nginx -y
+    sudo apt install nginx
 fi
 
 if ! [ -e '/data/web_static/shared/' ]; then
@@ -16,7 +16,19 @@ fi
 
 # Creating html file
 if ! [ -e '/data/web_static/releases/test/index.html' ]; then
-    echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html >/dev/null 2>&1
+    sudo touch /data/web_static/releases/test/index.html
+    printf %s "<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Document</title>
+</head>
+<body>
+    <h1>Holberton School</h1>
+    <footer>Powered by NGINX web server</footer>
+</body>
+</html>" | sudo tee /data/web_static/releases/test/index.html >/dev/null 2>&1
 
 fi
 
@@ -24,9 +36,9 @@ fi
 if [ -L '/data/web_static/current' ]; then
     sudo rm -rf /data/web_static/current
 fi
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -s /data/web_static/releases/test/ /data/web_static/current
 
-sudo chown -hR ubuntu:ubuntu /data/
+# sudo chown -R ubuntu:ubuntu /data/
 
 # Nginx configuration
 nginx_config="\
@@ -34,7 +46,7 @@ server{
     listen 80 default_server;
     listen [::]:80 default_server;
     server_name _;
-    location /hbnb_static/ {
+    location /hbnb_static {
         alias /data/web_static/current/;
     }
 }
