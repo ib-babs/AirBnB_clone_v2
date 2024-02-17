@@ -12,8 +12,8 @@ app = Flask(__name__)
 @app.route('/', strict_slashes=False)
 def hello():
     """Hello to HBNB"""
-    name = request.args.get("name", "World")
-    return 'Hello {escape(name)}!'
+    name = request.args.get("name", "HBNB")
+    return f'Hello {escape(name)}!'
 
 
 if __name__ == '__main__':
