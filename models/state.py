@@ -14,8 +14,6 @@ class State(BaseModel, Base):
         __tablename__ = 'states'
         name = Column(String(128), nullable=False)
         cities = relationship("City", backref="state")
-    else:
-        name = ""
 
     def __init__(self, *args, **kwargs):
         """initializes state"""
