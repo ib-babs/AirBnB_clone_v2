@@ -6,7 +6,8 @@
     - Routes:
         - /states_list: display a HTML page: (inside the tag BODY)
             - H1 tag: “States”
-            - UL tag: with the list of all State objects present in DBStorage sorted by name (A->Z) tip
+            - UL tag: with the list of all State objects present in
+                DBStorage sorted by name (A->Z) tip
             - LI tag: description of one State: <state.id>: <B><state.name></B>
 """
 from flask import Flask, render_template
@@ -28,4 +29,4 @@ def teardown(error=None):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
